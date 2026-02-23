@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: dev-nexo-db-postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_DB: dev-nexo
+    ports:
+      - '5432:5432'

@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infra/prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum IntegrationProvider {
+  GITHUB
+  JIRA
+  PLANNER
+}
+
+enum ReportSourceProvider {
+  GITHUB
+}
+
+enum ReportItemType {
+  COMMIT
+  PULL_REQUEST
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String?  @unique
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  integrations Integration[]
+  reports      Report[]
+  usageLogs    UsageLog[]
+
+  @@map("users")
+}
+
+model Integration {
+  id                    String              @id @default(uuid()) @db.Uuid
+  userId                String              @map("user_id") @db.Uuid
+  externalUserId        String              @map("external_user_id")
+  provider              IntegrationProvider
+  accessTokenEncrypted  String              @map("access_token_encrypted")
+  refreshTokenEncrypted String?             @map("refresh_token_encrypted")
+  scopes                String?
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime            @updatedAt @map("updated_at")
+
+  repositories Repository[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalUserId])
+  @@index([userId])
+  @@map("integrations")
+}
+
+model Repository {
+  id             String   @id @default(uuid()) @db.Uuid
+  integrationId  String   @map("integration_id") @db.Uuid
+  externalRepoId String   @map("external_repo_id")
+  name           String
+  fullName       String   @map("full_name")
+  isPrivate      Boolean  @map("is_private")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  reports Report[]
+
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@unique([integrationId, externalRepoId])
+  @@index([integrationId])
+  @@map("repositories")
+}
+
+model Report {
+  id             String               @id @default(uuid()) @db.Uuid
+  userId         String               @map("user_id") @db.Uuid
+  repositoryId   String               @map("repository_id") @db.Uuid
+  sourceProvider ReportSourceProvider @map("source_provider")
+  periodStart    DateTime             @map("period_start")
+  periodEnd      DateTime             @map("period_end")
+  summaryText    String               @map("summary_text") @db.Text
+
+  items     ReportItem[]
+  usageLogs UsageLog[]
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([repositoryId])
+  @@map("reports")
+}
+
+model ReportItem {
+  id       String @id @default(uuid()) @db.Uuid
+  reportId String @map("report_id") @db.Uuid
+
+  type        ReportItemType
+  title       String
+  description String?
+  occurredAt  DateTime       @map("occurred_at")
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@map("report_items")
+}
+
+model UsageLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  reportId   String   @map("report_id") @db.Uuid
+  model      String
+  tokensUsed Int      @map("tokens_used")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([reportId])
+  @@map("usage_logs")
+}

@@ -1,9 +1,15 @@
-node_modules/
-dist/
-build/
-coverage/
-logs/
-*.log
-*.tmp
-.DS_Store
+# application
+node_modules
+build
+dist
+scripts/*
+
+# prisma orm
+/generated/prisma
+/src/infra/prisma/generated/prisma
+
+# dotenv
 .env
+
+# arquivos zip
+*.zip
