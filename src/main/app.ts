@@ -4,7 +4,10 @@ import { ApplicationError } from '@application/errors/application/ApplicationErr
 import { ErrorCode } from '@application/errors/ErrorCode';
 import { HttpError } from '@application/errors/http/HttpError';
 import { fastifyCors } from '@fastify/cors';
+import { fastifyJwt } from '@fastify/jwt';
 import { fastifySwagger } from '@fastify/swagger';
+import ScalarApiReference from '@scalar/fastify-api-reference';
+import { env } from '@shared/config/env';
 import { fastify, type FastifyError } from 'fastify';
 import {
   jsonSchemaTransform,
@@ -14,6 +17,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { ZodError } from 'zod';
 
+import { authRoutes } from './routes/auth/authRoutes';
 import { fastifyErrorResponse } from './utils/fastifyErrorResponse';
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -25,6 +29,10 @@ app.register(fastifyCors, {
   origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
+});
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
 });
 
 app.register(fastifySwagger, {
@@ -47,10 +55,15 @@ app.register(fastifySwagger, {
   transform: jsonSchemaTransform,
 });
 
+app.register(ScalarApiReference, {
+  routePrefix: '/docs',
+});
+
 // Routes
 app.get('/', (_, reply) => {
   reply.send({ message: '🟢 API is running!' });
 });
+app.register(authRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
