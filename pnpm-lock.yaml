@@ -31,6 +31,12 @@ importers:
       pg:
         specifier: ^8.18.0
         version: 8.18.0
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      uuidv7:
+        specifier: ^1.1.0
+        version: 1.1.0
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -3242,6 +3248,12 @@ packages:
       }
     engines: { node: '>= 12.13.0' }
 
+  reflect-metadata@0.2.2:
+    resolution:
+      {
+        integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==,
+      }
+
   regexp-to-ast@0.5.0:
     resolution:
       {
@@ -3665,6 +3677,13 @@ packages:
       {
         integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==,
       }
+
+  uuidv7@1.1.0:
+    resolution:
+      {
+        integrity: sha512-2VNnOC0+XQlwogChUDzy6pe8GQEys9QFZBGOh54l6qVfwoCUwwRvk7rDTgaIsRgsF5GFa5oiNg8LqXE3jofBBg==,
+      }
+    hasBin: true
 
   valibot@1.2.0:
     resolution:
@@ -5520,6 +5539,8 @@ snapshots:
 
   real-require@0.2.0: {}
 
+  reflect-metadata@0.2.2: {}
+
   regexp-to-ast@0.5.0: {}
 
   remeda@2.33.4: {}
@@ -5760,6 +5781,8 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  uuidv7@1.1.0: {}
 
   valibot@1.2.0(typescript@5.9.3):
     optionalDependencies:

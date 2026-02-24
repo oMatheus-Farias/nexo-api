@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { ApplicationError } from '@application/errors/application/ApplicationError';
 import { ErrorCode } from '@application/errors/ErrorCode';
 import { HttpError } from '@application/errors/http/HttpError';

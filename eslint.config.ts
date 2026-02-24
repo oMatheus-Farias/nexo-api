@@ -41,6 +41,12 @@ export default defineConfig([
     languageOptions: { globals: globals.node },
   },
   tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-namespace': 'off',
+    },
+  },
   globalIgnores([
     '**/dist/**',
     '**/node_modules/**',

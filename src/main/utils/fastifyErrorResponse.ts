@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ErrorCode } from '@application/errors/ErrorCode';
 import type { FastifyReply } from 'fastify';
 
