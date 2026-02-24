@@ -1,7 +1,7 @@
 import type { RefreshToken } from '@application/entities/RefreshToken';
+import type { IRefreshTokenRepository } from '@domain/contracts/repositories/RefreshTokenRepository';
 import { prismaClient } from '@infra/clients/prismaClient';
 import { Injectable } from '@kermel/decorators/Injectable';
-import type { IRefreshTokenRepository } from 'src/domain/contracts/repositories/RefreshTokenRepository';
 
 @Injectable()
 export class RefreshTokenRepository implements IRefreshTokenRepository {
