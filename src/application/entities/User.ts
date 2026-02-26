@@ -29,6 +29,8 @@ export class User {
     return new User({
       email: payload.email,
       name: payload.name,
+      googleId: payload.googleId ?? null,
+      avatarUrl: payload.avatarUrl ?? null,
     });
   }
 }
@@ -37,8 +39,8 @@ export namespace User {
   export type Attributes = {
     email: string;
     name: string;
-    googleId?: string;
-    avatarUrl?: string;
+    googleId?: string | null;
+    avatarUrl?: string | null;
     createdAt?: Date;
     updatedAt?: Date;
   };
@@ -46,5 +48,7 @@ export namespace User {
   export type CreatePayload = {
     email: string;
     name: string;
+    googleId?: string | null;
+    avatarUrl?: string | null;
   };
 }

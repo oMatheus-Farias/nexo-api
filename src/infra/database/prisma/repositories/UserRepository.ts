@@ -1,6 +1,7 @@
 import type {
   CreateGoogleUserInput,
   IUserRepository,
+  UpdateGoogleIdAndAvatarInput,
 } from '@domain/contracts/repositories/UserRepository';
 import { prismaClient } from '@infra/clients/prismaClient';
 import type { User } from '@infra/prisma/generated/prisma/client';
@@ -53,10 +54,10 @@ export class UserRepository implements IUserRepository {
     return createdUserId;
   }
 
-  async createGoogleUser(googleData: CreateGoogleUserInput): Promise<Pick<User, 'id'>> {
+  async createGoogleUser(googleData: CreateGoogleUserInput): Promise<Pick<User, 'id' | 'email'>> {
     const createdUserId = await prismaClient.user.create({
       data: googleData,
-      select: { id: true },
+      select: { id: true, email: true },
     });
 
     return createdUserId;
@@ -80,6 +81,25 @@ export class UserRepository implements IUserRepository {
     });
 
     return updatedUserId;
+  }
+
+  async updateGoogleIdAndAvatar(input: UpdateGoogleIdAndAvatarInput): Promise<Pick<User, 'id'>> {
+    const dataToUpdate: Partial<User> = {
+      googleId: input.googleId,
+      avatarUrl: input.avatarUrl ?? null,
+    };
+
+    if (input.name) {
+      dataToUpdate.name = input.name;
+    }
+
+    const updatedUser = await prismaClient.user.update({
+      where: { id: input.userId },
+      data: dataToUpdate,
+      select: { id: true },
+    });
+
+    return updatedUser;
   }
 
   async delete(userId: string): Promise<void> {
