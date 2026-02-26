@@ -25,6 +25,7 @@ enum ReportItemType {
 model User {
   id        String   @id @default(uuid()) @db.Uuid
   googleId  String?  @unique @map("google_id")
+  githubId  String?  @unique @map("github_id")
   name      String
   email     String?  @unique
   avatarUrl String?  @map("avatar_url")

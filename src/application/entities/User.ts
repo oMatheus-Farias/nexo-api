@@ -9,6 +9,8 @@ export class User {
 
   readonly googleId?: string | null;
 
+  readonly githubId?: string | null;
+
   readonly avatarUrl?: string | null;
 
   readonly createdAt: Date;
@@ -20,6 +22,7 @@ export class User {
     this.email = attr.email;
     this.name = attr.name;
     this.googleId = attr.googleId ?? null;
+    this.githubId = attr.githubId ?? null;
     this.avatarUrl = attr.avatarUrl ?? null;
     this.createdAt = attr.createdAt ?? new Date();
     this.updatedAt = attr.updatedAt ?? new Date();
@@ -30,6 +33,7 @@ export class User {
       email: payload.email,
       name: payload.name,
       googleId: payload.googleId ?? null,
+      githubId: payload.githubId ?? null,
       avatarUrl: payload.avatarUrl ?? null,
     });
   }
@@ -40,6 +44,7 @@ export namespace User {
     email: string;
     name: string;
     googleId?: string | null;
+    githubId?: string | null;
     avatarUrl?: string | null;
     createdAt?: Date;
     updatedAt?: Date;
@@ -49,6 +54,7 @@ export namespace User {
     email: string;
     name: string;
     googleId?: string | null;
+    githubId?: string | null;
     avatarUrl?: string | null;
   };
 }
