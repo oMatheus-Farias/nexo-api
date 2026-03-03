@@ -18,6 +18,7 @@ import {
 import { ZodError } from 'zod';
 
 import { authRoutes } from './routes/auth/authRoutes';
+import { userRoutes } from './routes/user/userRoutes';
 import { fastifyErrorResponse } from './utils/fastifyErrorResponse';
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -64,6 +65,7 @@ app.get('/', (_, reply) => {
   reply.send({ message: '🟢 API is running!' });
 });
 app.register(authRoutes);
+app.register(userRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
