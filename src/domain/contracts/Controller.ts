@@ -44,7 +44,7 @@ export namespace Controller {
     TParams = Record<string, unknown>,
     TQueryParams = Record<string, unknown>,
   > = BaseRequest<TBody, TParams, TQueryParams> & {
-    accountId: null;
+    userId: null;
   };
 
   type PrivateRequest<
@@ -52,7 +52,7 @@ export namespace Controller {
     TParams = Record<string, unknown>,
     TQueryParams = Record<string, unknown>,
   > = BaseRequest<TBody, TParams, TQueryParams> & {
-    accountId: string;
+    userId: string;
   };
 
   export type Request<
