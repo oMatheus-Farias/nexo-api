@@ -1,5 +1,5 @@
 import { Controller } from '@domain/contracts/Controller';
-import type { GetMeQuery } from '@infra/database/prisma/queries/GetMeQuery';
+import { GetMeQuery } from '@infra/database/prisma/queries/GetMeQuery';
 import { Injectable } from '@kermel/decorators/Injectable';
 
 @Injectable()
