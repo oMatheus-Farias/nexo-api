@@ -1,4 +1,4 @@
-import { RefreshTokenUseCase } from '@application/usecases/auth/RefreshToken';
+import { RefreshTokenUseCase } from '@application/usecases/auth/RefreshTokenUseCase';
 import { Controller } from '@domain/contracts/Controller';
 import { Injectable } from '@kermel/decorators/Injectable';
 import { Schema } from '@kermel/decorators/Schema';
