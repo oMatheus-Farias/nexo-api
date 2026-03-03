@@ -4,6 +4,7 @@ import { GithubOAuthController } from '@application/controllers/auth/GithubOAuth
 import { GoogleCallbackController } from '@application/controllers/auth/GoogleCallbackController';
 import { GoogleOAuthController } from '@application/controllers/auth/GoogleOAuthController';
 import { RefreshTokenController } from '@application/controllers/auth/RefreshTokenController';
+import { SignOutController } from '@application/controllers/auth/SignOutController';
 import type { FastifyInstance } from 'fastify';
 
 export async function authRoutes(app: FastifyInstance) {
@@ -16,6 +17,7 @@ export async function authRoutes(app: FastifyInstance) {
   const githubCallbackController = fastifyAdapter(GithubCallbackController);
 
   const refreshTokenController = fastifyAdapter(RefreshTokenController);
+  const signOutController = fastifyAdapter(SignOutController);
 
   app.get(`${prefix}/google`, { schema: {} }, googleOAuthController);
   app.get(`${prefix}/google/callback`, { schema: {} }, googleCallbackController);
@@ -24,4 +26,5 @@ export async function authRoutes(app: FastifyInstance) {
   app.get(`${prefix}/github/callback`, { schema: {} }, githubCallbackController);
 
   app.post(`${prefix}/refresh-tokens`, { schema: {} }, refreshTokenController);
+  app.post(`${prefix}/sign-out`, { schema: {} }, signOutController);
 }
