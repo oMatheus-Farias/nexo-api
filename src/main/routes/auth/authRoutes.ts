@@ -19,11 +19,11 @@ export async function authRoutes(app: FastifyInstance) {
   const refreshTokenController = fastifyAdapter(RefreshTokenController);
   const signOutController = fastifyAdapter(SignOutController);
 
-  app.get(`${prefix}/google`, { schema: {} }, googleOAuthController);
   app.get(`${prefix}/google/callback`, { schema: {} }, googleCallbackController);
-
-  app.get(`${prefix}/github`, { schema: {} }, githubOAuthController);
   app.get(`${prefix}/github/callback`, { schema: {} }, githubCallbackController);
+
+  app.post(`${prefix}/google`, { schema: {} }, googleOAuthController);
+  app.post(`${prefix}/github`, { schema: {} }, githubOAuthController);
 
   app.post(`${prefix}/refresh-tokens`, { schema: {} }, refreshTokenController);
   app.post(`${prefix}/sign-out`, { schema: {} }, signOutController);

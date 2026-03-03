@@ -25,6 +25,9 @@ export class GithubCallbackController extends Controller<
 
     return {
       statusCode: 302,
+      headers: {
+        Location: redirectUrl,
+      },
       body: {
         redirect_url: redirectUrl,
       },

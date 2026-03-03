@@ -22,10 +22,13 @@ export class GoogleCallbackController extends Controller<
     const { accessToken, refreshToken } = await this.googleCallbackUseCase.execute({ code });
 
     // Login bem-sucedido - redirecionar com tokens
-    const redirectUrl = `${env.FRONTEND_URL}/auth/google/callback?token=${accessToken}&refreshToken=${refreshToken}`;
+    const redirectUrl = `${env.FRONTEND_URL}/auth/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
 
     return {
       statusCode: 302,
+      headers: {
+        Location: redirectUrl,
+      },
       body: {
         redirect_url: redirectUrl,
       },

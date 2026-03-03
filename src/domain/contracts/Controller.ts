@@ -67,5 +67,6 @@ export namespace Controller {
   export type Response<TBody = undefined> = {
     statusCode: number;
     body?: TBody;
+    headers?: Record<string, string>;
   };
 }

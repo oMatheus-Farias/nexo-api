@@ -24,6 +24,10 @@ export function fastifyAdapter<TType extends 'public' | 'private', TBody>(
 
     const response = await controller.execute(controllerRequest);
 
+    if (response.headers) {
+      reply.headers(response.headers);
+    }
+
     reply.status(response.statusCode).send(response.body);
   };
 }
