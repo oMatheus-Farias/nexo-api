@@ -80,6 +80,7 @@ export class GoogleCallbackUseCase {
       updatedAt: userEntity.updatedAt,
       googleId: userEntity.googleId ?? null,
       avatarUrl: userEntity.avatarUrl ?? null,
+      githubId: null,
     });
 
     const accessToken = this.jwtTokenGateway.sign(newUser.id);
