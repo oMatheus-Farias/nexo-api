@@ -36,6 +36,13 @@ export class GoogleCallbackUseCase {
     const user = await this.userRepository.findByGoogleId(googleUser.id);
 
     if (user) {
+      await this.userRepository.updateGoogleIdAndAvatar({
+        userId: user.id,
+        googleId: googleUser.id,
+        avatarUrl: googleUser.picture,
+        name: googleUser.name,
+      });
+
       const accessToken = this.jwtTokenGateway.sign(user.id);
       const refreshToken = await this.createRefreshToken(user.id);
 

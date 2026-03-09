@@ -48,6 +48,13 @@ export class GithubCallbackUseCase {
     const user = await this.userRepository.findByGithubId(githubUserId);
 
     if (user) {
+      await this.userRepository.updateGithubIdAndAvatar({
+        userId: user.id,
+        githubId: githubUserId,
+        avatarUrl: githubUser.avatar_url,
+        name: user.name,
+      });
+
       const accessToken = this.jwtTokenGateway.sign(user.id);
       const refreshToken = await this.createRefreshToken(user.id);
 
