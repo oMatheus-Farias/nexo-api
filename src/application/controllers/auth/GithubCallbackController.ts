@@ -21,7 +21,7 @@ export class GithubCallbackController extends Controller<
 
     const { accessToken, refreshToken } = await this.githubCallbackUseCase.execute({ code });
 
-    const redirectUrl = `${env.FRONTEND_URL}/auth/github/callback?token=${accessToken}&refreshToken=${refreshToken}`;
+    const redirectUrl = `${env.FRONTEND_URL}/auth/github/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
 
     return {
       statusCode: 302,
