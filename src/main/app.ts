@@ -18,6 +18,8 @@ import {
 import { ZodError } from 'zod';
 
 import { authRoutes } from './routes/auth/authRoutes';
+import { healthCheckRoute } from './routes/healthCheckRoute';
+import { statusRoute } from './routes/statusRoute';
 import { userRoutes } from './routes/user/userRoutes';
 import { fastifyErrorResponse } from './utils/fastifyErrorResponse';
 
@@ -61,9 +63,8 @@ app.register(ScalarApiReference, {
 });
 
 // Routes
-app.get('/', (_, reply) => {
-  reply.send({ message: '🟢 API is running!' });
-});
+app.register(healthCheckRoute);
+app.register(statusRoute);
 app.register(authRoutes);
 app.register(userRoutes);
 
