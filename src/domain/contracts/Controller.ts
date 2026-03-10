@@ -1,4 +1,5 @@
-import type { FastifyJWT } from '@fastify/jwt';
+import { type CookieSerializeOptions } from '@fastify/cookie';
+import { type FastifyJWT } from '@fastify/jwt';
 import { getSchema } from '@kermel/decorators/Schema';
 
 type TRouteType = 'public' | 'private';
@@ -37,6 +38,7 @@ export namespace Controller {
     body: TBody;
     params: TParams;
     queryParams: TQueryParams;
+    cookies: Record<string, string | undefined>;
   } & FastifyJWT;
 
   type PublicRequest<
@@ -68,5 +70,10 @@ export namespace Controller {
     statusCode: number;
     body?: TBody;
     headers?: Record<string, string>;
+    cookies?: Array<{
+      name: string;
+      value: string;
+      options?: CookieSerializeOptions;
+    }>;
   };
 }

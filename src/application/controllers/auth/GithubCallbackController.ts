@@ -2,6 +2,7 @@ import { GithubCallbackUseCase } from '@application/usecases/auth/GithubCallback
 import { Controller } from '@domain/contracts/Controller';
 import { Injectable } from '@kermel/decorators/Injectable';
 import { env } from '@shared/config/env';
+import { Encryption } from '@shared/utils/Encryption';
 
 @Injectable()
 export class GithubCallbackController extends Controller<
@@ -21,7 +22,7 @@ export class GithubCallbackController extends Controller<
 
     const { accessToken, refreshToken } = await this.githubCallbackUseCase.execute({ code });
 
-    const redirectUrl = `${env.FRONTEND_URL}/auth/github/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+    const redirectUrl = `${env.FRONTEND_URL}/auth/github/callback?refreshToken=${refreshToken}`;
 
     return {
       statusCode: 302,
@@ -31,6 +32,19 @@ export class GithubCallbackController extends Controller<
       body: {
         redirect_url: redirectUrl,
       },
+      cookies: [
+        {
+          name: 'nexo-access-token',
+          value: Encryption.encrypt(accessToken),
+          options: {
+            path: '/',
+            secure: true,
+            sameSite: 'lax',
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60, // 7 days
+          },
+        },
+      ],
     };
   }
 }

@@ -13,6 +13,22 @@ export class SignOutController extends Controller<'private', void> {
   }: Controller.Request<'private'>): Promise<Controller.Response<void>> {
     await this.signOutUseCase.execute({ userId });
 
-    return { statusCode: 204, body: undefined };
+    return {
+      statusCode: 204,
+      body: undefined,
+      cookies: [
+        {
+          name: 'nexo-access-token',
+          value: '',
+          options: {
+            path: '/',
+            secure: true,
+            sameSite: 'lax',
+            httpOnly: true,
+            maxAge: 0,
+          },
+        },
+      ],
+    };
   }
 }

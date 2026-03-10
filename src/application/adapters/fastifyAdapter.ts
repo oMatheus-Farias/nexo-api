@@ -14,18 +14,26 @@ export function fastifyAdapter<TType extends 'public' | 'private', TBody>(
     const params = (request.params ?? {}) as Record<string, unknown>;
     const queryParams = (request.query ?? {}) as Record<string, unknown>;
     const userId = request.user?.sub ?? null;
+    const cookies = request.cookies;
 
     const controllerRequest = {
       body,
       params,
       queryParams,
       userId,
+      cookies,
     } as unknown as Controller.Request<TType>;
 
     const response = await controller.execute(controllerRequest);
 
     if (response.headers) {
       reply.headers(response.headers);
+    }
+
+    if (response.cookies) {
+      response.cookies.forEach((cookie) => {
+        reply.setCookie(cookie.name, cookie.value, cookie.options);
+      });
     }
 
     reply.status(response.statusCode).send(response.body);

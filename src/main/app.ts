@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { ApplicationError } from '@application/errors/application/ApplicationError';
 import { ErrorCode } from '@application/errors/ErrorCode';
 import { HttpError } from '@application/errors/http/HttpError';
+import { fastifyCookie } from '@fastify/cookie';
 import { fastifyCors } from '@fastify/cors';
 import { fastifyJwt } from '@fastify/jwt';
 import { fastifySwagger } from '@fastify/swagger';
@@ -37,6 +38,8 @@ app.register(fastifyCors, {
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
 });
+
+app.register(fastifyCookie);
 
 app.register(fastifySwagger, {
   openapi: {
