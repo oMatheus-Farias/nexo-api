@@ -19,6 +19,7 @@ import {
 import { ZodError } from 'zod';
 
 import { authRoutes } from './routes/auth/authRoutes';
+import { githubRoutes } from './routes/github/githubRoutes';
 import { healthCheckRoute } from './routes/healthCheckRoute';
 import { statusRoute } from './routes/statusRoute';
 import { userRoutes } from './routes/user/userRoutes';
@@ -70,6 +71,7 @@ app.register(healthCheckRoute);
 app.register(statusRoute);
 app.register(authRoutes);
 app.register(userRoutes);
+app.register(githubRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

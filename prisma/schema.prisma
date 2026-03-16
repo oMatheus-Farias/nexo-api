@@ -59,6 +59,7 @@ model Integration {
   accessTokenEncrypted  String              @map("access_token_encrypted")
   refreshTokenEncrypted String?             @map("refresh_token_encrypted")
   scopes                String?
+  installationId        String?             @map("installation_id")
   createdAt             DateTime            @default(now()) @map("created_at")
   updatedAt             DateTime            @updatedAt @map("updated_at")
 
