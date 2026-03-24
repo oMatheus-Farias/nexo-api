@@ -11,7 +11,7 @@ export class GetMeController extends Controller<'private', GetMeController.Respo
   protected override async handle({
     userId,
   }: Controller.Request<'private'>): Promise<Controller.Response<GetMeController.Response>> {
-    const { id, name, avatarUrl } = await this.getMeQuery.execute({ userId });
+    const { id, name, avatarUrl, isGithubAppInstalled } = await this.getMeQuery.execute({ userId });
 
     return {
       statusCode: 200,
@@ -19,6 +19,7 @@ export class GetMeController extends Controller<'private', GetMeController.Respo
         id,
         name,
         avatar_url: avatarUrl,
+        is_github_app_installed: isGithubAppInstalled,
       },
     };
   }
@@ -29,5 +30,6 @@ export namespace GetMeController {
     id: string;
     name: string;
     avatar_url: string | null;
+    is_github_app_installed: boolean;
   };
 }

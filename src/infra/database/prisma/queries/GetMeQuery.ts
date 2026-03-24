@@ -13,6 +13,12 @@ export class GetMeQuery {
         id: true,
         name: true,
         avatarUrl: true,
+        integrations: {
+          select: {
+            provider: true,
+            installationId: true,
+          },
+        },
       },
     });
 
@@ -20,7 +26,15 @@ export class GetMeQuery {
       throw new NotFound('User not found');
     }
 
-    return data;
+    const githubIntegration = data.integrations.find((i) => i.provider === 'GITHUB');
+    const isGithubAppInstalled = !!(githubIntegration && githubIntegration.installationId);
+
+    return {
+      id: data.id,
+      name: data.name,
+      avatarUrl: data.avatarUrl,
+      isGithubAppInstalled,
+    };
   }
 }
 
@@ -33,5 +47,6 @@ export namespace GetMeQuery {
     id: string;
     name: string;
     avatarUrl: string | null;
+    isGithubAppInstalled: boolean;
   };
 }
