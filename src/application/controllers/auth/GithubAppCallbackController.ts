@@ -23,7 +23,7 @@ export class GithubAppCallbackController extends Controller<'public'> {
       return {
         statusCode: 302,
         headers: {
-          Location: `${process.env.FRONTEND_URL}/dashboard/repositories?source=github_app_success`,
+          Location: `${process.env.FRONTEND_URL}/repositories?source=github_app_success`,
         },
       };
     } catch (error: any) {
@@ -31,7 +31,7 @@ export class GithubAppCallbackController extends Controller<'public'> {
         return {
           statusCode: 302,
           headers: {
-            Location: `${process.env.FRONTEND_URL}/dashboard/repositories?error=github_not_linked`,
+            Location: `${process.env.FRONTEND_URL}/repositories?error=github_not_linked`,
           },
         };
       }
@@ -39,7 +39,7 @@ export class GithubAppCallbackController extends Controller<'public'> {
       return {
         statusCode: 302,
         headers: {
-          Location: `${process.env.FRONTEND_URL}/dashboard/repositories?error=app_install_failed`,
+          Location: `${process.env.FRONTEND_URL}/repositories?error=app_install_failed`,
         },
       };
     }

@@ -3,10 +3,10 @@ import { Injectable } from '@kermel/decorators/Injectable';
 import { App } from '@octokit/app';
 import { env } from '@shared/config/env';
 
-export type IGithubAppGateway = {
-  getInstallationRepositories(installationId: string): Promise<any[]>;
-  getInstallationDetails(installationId: string): Promise<{ githubUserId: string }>;
-};
+export abstract class IGithubAppGateway {
+  abstract getInstallationRepositories(installationId: string): Promise<any[]>;
+  abstract getInstallationDetails(installationId: string): Promise<{ githubUserId: string }>;
+}
 
 @Injectable()
 export class GithubAppGateway implements IGithubAppGateway {
@@ -15,7 +15,7 @@ export class GithubAppGateway implements IGithubAppGateway {
   constructor() {
     this.app = new App({
       appId: env.GITHUB_APP_ID,
-      privateKey: env.GITHUB_APP_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      privateKey: Buffer.from(env.GITHUB_APP_PRIVATE_KEY, 'base64').toString('ascii'),
     });
   }
 

@@ -1,16 +1,16 @@
 import { Conflict } from '@application/errors/http/Conflict';
+import { PrismaIntegrationRepository } from '@infra/database/prisma/repositories/PrismaIntegrationRepository';
+import { UserRepository } from '@infra/database/prisma/repositories/UserRepository';
+import { GithubAppGateway } from '@infra/gateways/github/GithubAppGateway';
 
-import type { IntegrationRepository } from '../../../domain/contracts/repositories/IntegrationRepository';
-import { IUserRepository } from '../../../domain/contracts/repositories/UserRepository';
-import type { IGithubAppGateway } from '../../../infra/gateways/github/GithubAppGateway';
 import { Injectable } from '../../../kermel/decorators/Injectable';
 
 @Injectable()
 export class GithubAppInstallCallbackUseCase {
   constructor(
-    private readonly integrationRepository: IntegrationRepository,
-    private readonly userRepository: IUserRepository,
-    private readonly githubAppGateway: IGithubAppGateway,
+    private readonly integrationRepository: PrismaIntegrationRepository,
+    private readonly userRepository: UserRepository,
+    private readonly githubAppGateway: GithubAppGateway,
   ) {}
 
   async execute({
