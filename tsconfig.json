@@ -22,14 +22,13 @@
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": ".",
     "paths": {
-      "@application/*": ["src/application/*"],
-      "@domain/*": ["src/domain/*"],
-      "@infra/*": ["src/infra/*"],
-      "@kermel/*": ["src/kermel/*"],
-      "@main/*": ["src/main/*"],
-      "@shared/*": ["src/shared/*"]
+      "@application/*": ["./src/application/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@infra/*": ["./src/infra/*"],
+      "@kermel/*": ["./src/kermel/*"],
+      "@main/*": ["./src/main/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src/**/*"],

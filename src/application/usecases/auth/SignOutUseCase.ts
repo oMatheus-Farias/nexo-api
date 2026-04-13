@@ -1,6 +1,6 @@
 import { Conflict } from '@application/errors/http/Conflict';
+import { RefreshTokenRepository } from '@infra/database/prisma/repositories/RefreshTokenRepository';
 import { Injectable } from '@kermel/decorators/Injectable';
-import { RefreshTokenRepository } from 'src/infra/database/prisma/repositories/RefreshTokenRepository';
 
 @Injectable()
 export class SignOutUseCase {
