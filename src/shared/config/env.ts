@@ -13,6 +13,8 @@ const schema = z.object({
   GITHUB_CALLBACK_URL: z.string(),
   GITHUB_APP_ID: z.string(),
   GITHUB_APP_PRIVATE_KEY: z.string(),
+  OPENAI_API_KEY: z.string().default(''),
+  OPENAI_MODEL: z.string().default('gpt-4.1-mini'),
 });
 
 export const env = schema.parse(process.env);

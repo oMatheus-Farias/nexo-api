@@ -21,6 +21,7 @@ import { ZodError } from 'zod';
 import { authRoutes } from './routes/auth/authRoutes';
 import { githubRoutes } from './routes/github/githubRoutes';
 import { healthCheckRoute } from './routes/healthCheckRoute';
+import { reportRoutes } from './routes/report/reportRoutes';
 import { repositoryRoutes } from './routes/repository/repositoryRoutes';
 import { statusRoute } from './routes/statusRoute';
 import { userRoutes } from './routes/user/userRoutes';
@@ -73,6 +74,7 @@ app.register(statusRoute);
 app.register(authRoutes);
 app.register(userRoutes);
 app.register(githubRoutes);
+app.register(reportRoutes);
 app.register(repositoryRoutes);
 
 app.setErrorHandler((error, _, reply) => {
