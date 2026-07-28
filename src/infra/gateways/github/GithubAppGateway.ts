@@ -4,7 +4,9 @@ import { App } from '@octokit/app';
 import { env } from '@shared/config/env';
 
 export abstract class IGithubAppGateway {
-  abstract getInstallationRepositories(installationId: string): Promise<any[]>;
+  abstract getInstallationRepositories(
+    installationId: string,
+  ): Promise<GithubAppGateway.InstallationRepository[]>;
 
   abstract findInstallationRepository(
     installationId: string,
@@ -37,9 +39,11 @@ export class GithubAppGateway implements IGithubAppGateway {
     });
   }
 
-  async getInstallationRepositories(installationId: string): Promise<any[]> {
+  async getInstallationRepositories(
+    installationId: string,
+  ): Promise<GithubAppGateway.InstallationRepository[]> {
     const octokit = await this.app.getInstallationOctokit(Number(installationId));
-    const repositories: any[] = [];
+    const repositories: GithubAppGateway.InstallationRepository[] = [];
 
     let page = 1;
 
@@ -49,7 +53,9 @@ export class GithubAppGateway implements IGithubAppGateway {
         page,
       });
 
-      repositories.push(...response.data.repositories);
+      repositories.push(
+        ...(response.data.repositories as GithubAppGateway.InstallationRepository[]),
+      );
 
       if (response.data.repositories.length < 100) {
         break;
@@ -70,7 +76,7 @@ export class GithubAppGateway implements IGithubAppGateway {
   ): Promise<GithubAppGateway.SelectedRepository | null> {
     const repositories = await this.getInstallationRepositories(installationId);
 
-    const repository = repositories.find((item: any) => {
+    const repository = repositories.find((item) => {
       if (filter.repositoryExternalId) {
         return item.id?.toString() === filter.repositoryExternalId;
       }
@@ -295,6 +301,17 @@ export class GithubAppGateway implements IGithubAppGateway {
 }
 
 export namespace GithubAppGateway {
+  export type InstallationRepository = {
+    id: number;
+    name: string;
+    full_name: string;
+    private: boolean;
+    owner: {
+      login: string;
+    };
+    html_url: string;
+  };
+
   export type SelectedRepository = {
     id: string;
     name: string;

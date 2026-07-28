@@ -1,4 +1,5 @@
 import { Conflict } from '@application/errors/http/Conflict';
+import { SyncGithubRepositoriesUseCase } from '@application/usecases/github/SyncGithubRepositoriesUseCase';
 import { PrismaIntegrationRepository } from '@infra/database/prisma/repositories/PrismaIntegrationRepository';
 import { UserRepository } from '@infra/database/prisma/repositories/UserRepository';
 import { GithubAppGateway } from '@infra/gateways/github/GithubAppGateway';
@@ -11,6 +12,7 @@ export class GithubAppInstallCallbackUseCase {
     private readonly integrationRepository: PrismaIntegrationRepository,
     private readonly userRepository: UserRepository,
     private readonly githubAppGateway: GithubAppGateway,
+    private readonly syncGithubRepositoriesUseCase: SyncGithubRepositoriesUseCase,
   ) {}
 
   async execute({
@@ -39,6 +41,8 @@ export class GithubAppInstallCallbackUseCase {
       installationId,
       scopes: existing?.scopes as string,
     });
+
+    await this.syncGithubRepositoriesUseCase.execute(user.id);
   }
 }
 

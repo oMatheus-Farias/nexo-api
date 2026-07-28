@@ -1,27 +1,21 @@
-import { PrismaIntegrationRepository } from '@infra/database/prisma/repositories/PrismaIntegrationRepository';
-import { GithubAppGateway } from '@infra/gateways/github/GithubAppGateway';
+import { SyncGithubRepositoriesUseCase } from '@application/usecases/github/SyncGithubRepositoriesUseCase';
 
 import { Injectable } from '../../../kermel/decorators/Injectable';
-import { NotFound } from '../../errors/http/NotFound';
 
 @Injectable()
 export class ListGithubRepositoriesUseCase {
-  constructor(
-    private readonly integrationRepository: PrismaIntegrationRepository,
-    private readonly githubAppGateway: GithubAppGateway,
-  ) {}
+  constructor(private readonly syncGithubRepositoriesUseCase: SyncGithubRepositoriesUseCase) {}
 
-  async execute(userId: string): Promise<any[]> {
-    const integration = await this.integrationRepository.findByUserIdAndProvider(userId, 'GITHUB');
-
-    if (!integration || !integration.installationId) {
-      throw new NotFound('GitHub Integration or App Installation not found for this user.');
-    }
-
-    const repositories = await this.githubAppGateway.getInstallationRepositories(
-      integration.installationId,
-    );
-
-    return repositories;
+  async execute(userId: string): Promise<GithubAppRepository[]> {
+    return this.syncGithubRepositoriesUseCase.execute(userId);
   }
 }
+
+export type GithubAppRepository = {
+  id: string;
+  name: string;
+  fullName: string;
+  owner: string;
+  isPrivate: boolean;
+  htmlUrl: string;
+};

@@ -5,7 +5,11 @@ import { Injectable } from '@kermel/decorators/Injectable';
 @Injectable()
 export class GetRepositoriesQuery {
   async execute(input: GetRepositoriesQuery.Input): Promise<GetRepositoriesQuery.Output> {
-    const where: RepositoryWhereInput = {};
+    const where: RepositoryWhereInput = {
+      integration: {
+        userId: input.userId,
+      },
+    };
 
     const hasSearchTerm = input.searchTerm?.trim() && input.searchTerm !== 'undefined';
     if (hasSearchTerm) {
@@ -45,6 +49,7 @@ export class GetRepositoriesQuery {
 
 export namespace GetRepositoriesQuery {
   export type Input = {
+    userId: string;
     page: number;
     limitPerPage?: number | undefined;
     searchTerm?: string | undefined;

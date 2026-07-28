@@ -12,6 +12,7 @@ export class GetRepositoriesController extends Controller<
   }
 
   protected override async handle({
+    userId,
     queryParams,
   }: Controller.Request<'private'>): Promise<
     Controller.Response<GetRepositoriesController.Response>
@@ -19,6 +20,7 @@ export class GetRepositoriesController extends Controller<
     const { page, limitPerPage, searchTerm } = queryParams as GetRepositoriesController.Request;
 
     const { repositories, meta } = await this.getRepositoriesQuery.execute({
+      userId,
       page,
       limitPerPage,
       searchTerm,

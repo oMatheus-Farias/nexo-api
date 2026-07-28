@@ -22,6 +22,8 @@ export class GithubCallbackController extends Controller<
 
     const { accessToken, refreshToken } = await this.githubCallbackUseCase.execute({ code });
 
+    console.log('Access Token:', JSON.stringify(accessToken, null, 2));
+
     const redirectUrl = `${env.FRONTEND_URL}/auth/github/callback?refreshToken=${refreshToken}`;
 
     return {
