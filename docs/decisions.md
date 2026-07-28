@@ -84,6 +84,18 @@
 - Evidencias: `src/kermel/decorators/Injectable.ts`, `src/kermel/di/Registry.ts`.
 - Arquivos relacionados: `src/application/adapters/fastifyAdapter.ts`.
 
+## ADR-008 - Repositorios GitHub como snapshot local sincronizado
+
+- Status: Aceita
+- Data: Nao identificada
+- Contexto: o backend precisava deixar de depender da API do GitHub em tempo real para a listagem principal de repositorios e para a experiencia da tela de gerenciamento.
+- Decisao: sincronizar os repositorios da instalacao do GitHub App para a tabela `repositories` por callback de instalacao e por sincronizacao manual, mantendo o banco como fonte de leitura para a tela paginada.
+- Motivo: reduz dependencia externa no caminho de leitura, facilita paginação/busca e permite reaproveitar o snapshot para relatorios e estados locais.
+- Consequencias: o backend precisa manter o snapshot atualizado; a listagem passa a refletir o estado persistido e nao apenas a resposta imediata do GitHub.
+- Alternativas identificadas: continuar consultando o GitHub em tempo real; criar um job de sincronizacao periodica desde o inicio.
+- Evidencias: `src/application/usecases/github/SyncGithubRepositoriesUseCase.ts`, `src/application/usecases/auth/GithubAppInstallCallbackUseCase.ts`, `src/infra/database/prisma/queries/GetRepositoriesQuery.ts`.
+- Arquivos relacionados: `src/main/routes/repository/repositoryRoutes.ts`, `src/application/controllers/repositories/SyncRepositoriesController.ts`.
+
 ## Quando atualizar este documento
 
 Registre novas decisoes relevantes quando uma tarefa introduzir ou alterar:

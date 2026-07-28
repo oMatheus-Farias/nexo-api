@@ -36,15 +36,15 @@ As integracoes confirmadas neste repositorio sao:
 
 ## GitHub App
 
-- Finalidade: identificar instalacoes, listar repositorios e coletar atividades para relatorios.
-- Fluxo: callback de instalacao em `GET /github/app/callback`, listagem em `GET /github/repositories`, coleta de atividades durante a geracao do relatorio.
+- Finalidade: identificar instalacoes, sincronizar repositorios e coletar atividades para relatorios.
+- Fluxo: callback de instalacao em `GET /github/app/callback`, sincronizacao manual em `POST /repositories/sync`, listagem em `GET /repositories/paginated`, coleta de atividades durante a geracao do relatorio.
 - Direcao do fluxo: backend -> GitHub App REST API.
 - Modulo responsavel: `src/infra/gateways/github/GithubAppGateway.ts`.
 - Autenticacao: `GITHUB_APP_ID` e `GITHUB_APP_PRIVATE_KEY` base64, decodificada para uso pelo SDK da `@octokit/app`.
 - Clientes/endpoints usados: `GET /installation/repositories`, `GET /repos/{owner}/{repo}/commits`, `GET /repos/{owner}/{repo}/pulls`, `GET /repos/{owner}/{repo}/issues`, `GET /app/installations/{installation_id}`.
 - Eventos/payloads relevantes: `installation_id` e `setup_action` no callback; repositorios, commits, pull requests e issues retornados pelo GitHub.
 - Tratamento de erro: quando a instalacao nao resolve um account valido, o gateway lança `Conflict`.
-- Idempotencia: `PrismaIntegrationRepository.createOrUpdate` atualiza a integracao GitHub existente em vez de criar duplicata.
+- Idempotencia: `PrismaIntegrationRepository.createOrUpdate` atualiza a integracao GitHub existente em vez de criar duplicata; a sincronizacao dos repositorios usa `upsert` por `integrationId` e `externalRepoId`.
 - Limites: paginação manual em blocos de 100 itens; coleta de atividades truncada por `maxItemsPerType`.
 - Arquivos relacionados: `src/application/usecases/auth/GithubAppInstallCallbackUseCase.ts`, `src/application/usecases/github/ListGithubRepositoriesUseCase.ts`, `src/application/usecases/reports/GenerateGithubRepositoryReportUseCase.ts`.
 

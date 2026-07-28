@@ -63,11 +63,11 @@ Documento com regras confirmadas no codigo atual. Quando houver ambiguidade, ela
 
 ### BR-007 - A listagem de repositorios GitHub depende da instalacao do GitHub App
 
-- Descricao: o usuario precisa ter integracao GitHub com `installationId`.
-- Evidencia: `src/application/usecases/github/ListGithubRepositoriesUseCase.ts`.
+- Descricao: o usuario precisa ter integracao GitHub com `installationId` e a listagem da tela de repositorios usa o snapshot local sincronizado a partir da instalacao.
+- Evidencia: `src/application/usecases/github/ListGithubRepositoriesUseCase.ts`, `src/application/usecases/github/SyncGithubRepositoriesUseCase.ts`, `src/infra/database/prisma/queries/GetRepositoriesQuery.ts`.
 - Condicoes: integracao ausente ou sem instalacao -> `NotFound`.
-- Impacto: retorna os repositorios disponiveis na instalacao.
-- Arquivos relacionados: `src/application/controllers/github/ListGithubRepositoriesController.ts`.
+- Impacto: o backend sincroniza os repositorios do GitHub App e retorna os dados persistidos.
+- Arquivos relacionados: `src/application/controllers/github/ListGithubRepositoriesController.ts`, `src/application/controllers/repositories/GetRepositoriesController.ts`, `src/main/routes/repository/repositoryRoutes.ts`.
 
 ## Geracao de relatorios
 
@@ -104,6 +104,14 @@ Documento com regras confirmadas no codigo atual. Quando houver ambiguidade, ela
 - Condicoes: se a resposta nao for JSON valido, a operacao falha.
 - Impacto: o texto salvo no relatorio vem apenas do campo validado.
 - Arquivos relacionados: `src/infra/database/prisma/repositories/PrismaReportRepository.ts`.
+
+### BR-013 - O snapshot de repositórios e sincronizado por callback e manualmente
+
+- Descricao: ao instalar ou atualizar o GitHub App, o backend grava os repositorios retornados pela instalacao; a tela de repositorios tambem pode disparar uma sincronizacao manual.
+- Evidencia: `src/application/usecases/auth/GithubAppInstallCallbackUseCase.ts`, `src/application/usecases/github/SyncGithubRepositoriesUseCase.ts`, `src/main/routes/repository/repositoryRoutes.ts`.
+- Condicoes: callback de instalacao bem-sucedido ou chamada autenticada de sincronizacao manual.
+- Impacto: os repositorios ficam disponiveis no banco para leitura paginada e para relatorios.
+- Arquivos relacionados: `src/infra/database/prisma/repositories/PrismaRepositoryRepository.ts`, `src/infra/database/prisma/queries/GetRepositoriesQuery.ts`.
 
 ## Seguranca e sessao
 

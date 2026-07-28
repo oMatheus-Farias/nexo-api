@@ -50,7 +50,7 @@ flowchart LR
 - `src/main/routes/github/githubRoutes.ts`: callback de instalacao do GitHub App e listagem de repositorios.
 - `src/main/routes/report/reportRoutes.ts`: geracao de relatorio de repositorio GitHub.
 - `src/main/routes/user/userRoutes.ts`: endpoint de usuario autenticado.
-- `src/main/routes/repository/repositoryRoutes.ts`: listagem paginada de repositorios persistidos.
+- `src/main/routes/repository/repositoryRoutes.ts`: listagem paginada e sincronizacao manual de repositorios persistidos.
 - `src/main/routes/healthCheckRoute.ts`: health check simples.
 - `src/main/routes/statusRoute.ts`: status tecnico com informacoes do banco.
 - `src/application/adapters/fastifyAdapter.ts`: adapta controllers da aplicacao para Fastify.
@@ -110,6 +110,7 @@ flowchart LR
 1. O GitHub chama `GET /github/app/callback`.
 2. O backend resolve o usuario do GitHub vinculado a instalacao.
 3. A integracao GitHub do usuario recebe `installationId`.
+4. O backend sincroniza os repositorios da instalacao para a tabela `repositories`.
 
 ### Geracao de relatorio
 
@@ -120,6 +121,14 @@ flowchart LR
 5. O backend sintetiza um payload compacto.
 6. O OpenAI gera o resumo.
 7. O report e persistido junto com usage log.
+
+### Sincronizacao de repositorios
+
+1. O usuario instala ou atualiza o GitHub App.
+2. O backend consulta os repositorios da instalacao autorizada.
+3. Cada repositorio e gravado em `repositories` com `upsert` por integracao e `externalRepoId`.
+4. A tela de repositorios passa a ler do banco filtrando pelo usuario autenticado.
+5. Um endpoint manual de sync permite revalidar o snapshot local quando necessario.
 
 ## Comunicacao entre componentes
 
