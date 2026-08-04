@@ -1,3 +1,8 @@
+allowBuilds:
+  '@prisma/engines': true
+  '@swc/core': true
+  esbuild: true
+  prisma: true
 onlyBuiltDependencies:
   - '@prisma/engines'
   - '@swc/core'
