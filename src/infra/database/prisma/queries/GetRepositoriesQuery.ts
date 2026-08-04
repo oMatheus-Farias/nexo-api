@@ -27,6 +27,7 @@ export class GetRepositoriesQuery {
       where,
       select: {
         id: true,
+        externalRepoId: true,
         name: true,
         fullName: true,
         isPrivate: true,
@@ -64,6 +65,7 @@ export namespace GetRepositoriesQuery {
   export type Output = {
     repositories: Array<{
       id: string;
+      externalRepoId: string;
       name: string;
       fullName: string;
       isPrivate: boolean;

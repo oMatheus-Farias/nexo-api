@@ -40,6 +40,7 @@ export class GetRepositoriesController extends Controller<
       body: {
         repositories: repositories.map((repo) => ({
           id: repo.id,
+          external_repo_id: repo.externalRepoId,
           name: repo.name,
           full_name: repo.fullName,
           is_private: repo.isPrivate,
@@ -72,6 +73,7 @@ export namespace GetRepositoriesController {
   export type Response = {
     repositories: Array<{
       id: string;
+      external_repo_id: string;
       name: string;
       full_name: string;
       is_private: boolean;

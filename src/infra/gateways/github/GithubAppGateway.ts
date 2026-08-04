@@ -225,54 +225,70 @@ export class GithubAppGateway implements IGithubAppGateway {
     }
 
     let issuesPage = 1;
-    while (issues.length < maxItemsPerType) {
-      const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
-        owner: input.owner,
-        repo: input.repo,
-        state: 'all',
-        sort: 'updated',
-        direction: 'desc',
-        since: input.periodStart.toISOString(),
-        per_page: 100,
-        page: issuesPage,
-      });
+    try {
+      while (issues.length < maxItemsPerType) {
+        const response = await octokit.request('GET /repos/{owner}/{repo}/issues', {
+          owner: input.owner,
+          repo: input.repo,
+          state: 'all',
+          sort: 'updated',
+          direction: 'desc',
+          since: input.periodStart.toISOString(),
+          per_page: 100,
+          page: issuesPage,
+        });
 
-      if (!response.data.length) {
-        break;
-      }
+        if (!response.data.length) {
+          break;
+        }
 
-      issues.push(
-        ...response.data
-          .filter((item) => !item.pull_request)
-          .map(
-            (issue): GithubAppGateway.IssueActivity => ({
-              number: issue.number,
-              title: issue.title,
-              state: issue.state === 'closed' ? 'closed' : 'open',
-              authorLogin: issue.user?.login ?? 'unknown',
-              createdAt: issue.created_at,
-              updatedAt: issue.updated_at,
-              closedAt: issue.closed_at,
-              comments: issue.comments,
-              htmlUrl: issue.html_url,
+        issues.push(
+          ...response.data
+            .filter((item) => !item.pull_request)
+            .map(
+              (issue): GithubAppGateway.IssueActivity => ({
+                number: issue.number,
+                title: issue.title,
+                state: issue.state === 'closed' ? 'closed' : 'open',
+                authorLogin: issue.user?.login ?? 'unknown',
+                createdAt: issue.created_at,
+                updatedAt: issue.updated_at,
+                closedAt: issue.closed_at,
+                comments: issue.comments,
+                htmlUrl: issue.html_url,
+              }),
+            )
+            .filter((issue) => {
+              const updatedAtDate = new Date(issue.updatedAt);
+              return updatedAtDate <= input.periodEnd;
             }),
-          )
-          .filter((issue) => {
-            const updatedAtDate = new Date(issue.updatedAt);
-            return updatedAtDate <= input.periodEnd;
-          }),
-      );
+        );
 
-      const oldestUpdatedAt = response.data[response.data.length - 1]?.updated_at;
-      if (oldestUpdatedAt && new Date(oldestUpdatedAt) < input.periodStart) {
-        break;
+        const oldestUpdatedAt = response.data[response.data.length - 1]?.updated_at;
+        if (oldestUpdatedAt && new Date(oldestUpdatedAt) < input.periodStart) {
+          break;
+        }
+
+        if (response.data.length < 100) {
+          break;
+        }
+
+        issuesPage += 1;
       }
+    } catch (error) {
+      const status =
+        typeof error === 'object' && error !== null && 'status' in error
+          ? Number((error as { status?: unknown }).status)
+          : undefined;
 
-      if (response.data.length < 100) {
-        break;
+      if (status === 403) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `GitHub App does not have access to issues for ${input.owner}/${input.repo}. Continuing report without issue data.`,
+        );
+      } else {
+        throw error;
       }
-
-      issuesPage += 1;
     }
 
     return {

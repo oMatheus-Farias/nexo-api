@@ -89,7 +89,15 @@ Documento com regras confirmadas no codigo atual. Quando houver ambiguidade, ela
 - Impacto: limita o volume de commits, pull requests e issues coletados.
 - Arquivos relacionados: `src/infra/gateways/github/GithubAppGateway.ts`.
 
-### BR-010 - O estilo do relatorio tem valores fixos
+### BR-010 - Falha de permissao em issues nao impede o report
+
+- Descricao: se o GitHub App nao tiver permissao para listar issues, o gateway registra a falha e continua a geracao do report sem issue data.
+- Evidencia: `src/infra/gateways/github/GithubAppGateway.ts`.
+- Condicoes: erro `403` ao consultar `GET /repos/{owner}/{repo}/issues`.
+- Impacto: o report segue com commits e pull requests, mas a secao de issues pode ficar vazia.
+- Arquivos relacionados: `src/application/usecases/reports/GenerateGithubRepositoryReportUseCase.ts`.
+
+### BR-011 - O estilo do relatorio tem valores fixos
 
 - Descricao: o estilo aceito e `EXECUTIVE`, `TECHNICAL`, `SPRINT` ou `WEEKLY`.
 - Evidencia: schema do controller e `OpenAiGateway`.
@@ -97,7 +105,7 @@ Documento com regras confirmadas no codigo atual. Quando houver ambiguidade, ela
 - Impacto: muda as instrucoes enviadas ao OpenAI.
 - Arquivos relacionados: `src/infra/gateways/openai/OpenAiGateway.ts`.
 
-### BR-011 - O resumo gerado pelo OpenAI deve ser JSON com summary_text
+### BR-012 - O resumo gerado pelo OpenAI deve ser JSON com summary_text
 
 - Descricao: o gateway de IA espera JSON e valida `summary_text`.
 - Evidencia: `src/infra/gateways/openai/OpenAiGateway.ts`.
