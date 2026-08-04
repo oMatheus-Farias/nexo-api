@@ -31,6 +31,12 @@ export class GetRepositoriesQuery {
         fullName: true,
         isPrivate: true,
         createdAt: true,
+        syncStatus: true,
+        isEnabled: true,
+        lastSyncedAt: true,
+        lastSyncAttemptAt: true,
+        lastSyncError: true,
+        disconnectedAt: true,
       },
       orderBy: { name: 'asc' },
     });
@@ -62,6 +68,12 @@ export namespace GetRepositoriesQuery {
       fullName: string;
       isPrivate: boolean;
       createdAt: Date;
+      syncStatus: 'SYNCED' | 'PENDING' | 'DISCONNECTED' | 'PAUSED' | 'ERROR';
+      isEnabled: boolean;
+      lastSyncedAt: Date | null;
+      lastSyncAttemptAt: Date | null;
+      lastSyncError: string | null;
+      disconnectedAt: Date | null;
     }>;
     meta: {
       pageIndex: number;

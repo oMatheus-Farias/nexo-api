@@ -42,7 +42,9 @@ export class GithubAppInstallCallbackUseCase {
       scopes: existing?.scopes as string,
     });
 
-    await this.syncGithubRepositoriesUseCase.execute(user.id);
+    await this.syncGithubRepositoriesUseCase.execute(user.id, {
+      createMissingRepositories: true,
+    });
   }
 }
 

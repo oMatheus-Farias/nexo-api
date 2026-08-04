@@ -44,6 +44,12 @@ export class GetRepositoriesController extends Controller<
           full_name: repo.fullName,
           is_private: repo.isPrivate,
           created_at: repo.createdAt,
+          sync_status: repo.syncStatus,
+          is_enabled: repo.isEnabled,
+          last_synced_at: repo.lastSyncedAt,
+          last_sync_attempt_at: repo.lastSyncAttemptAt,
+          last_sync_error: repo.lastSyncError,
+          disconnected_at: repo.disconnectedAt,
         })),
         meta: {
           page_index: meta.pageIndex,
@@ -70,6 +76,12 @@ export namespace GetRepositoriesController {
       full_name: string;
       is_private: boolean;
       created_at: Date;
+      sync_status: 'SYNCED' | 'PENDING' | 'DISCONNECTED' | 'PAUSED' | 'ERROR';
+      is_enabled: boolean;
+      last_synced_at: Date | null;
+      last_sync_attempt_at: Date | null;
+      last_sync_error: string | null;
+      disconnected_at: Date | null;
     }>;
     meta: {
       page_index: number;

@@ -157,6 +157,12 @@ export class GenerateGithubRepositoryReportUseCase {
       name: repository.name,
       fullName: repository.fullName,
       isPrivate: repository.isPrivate,
+      syncStatus: 'SYNCED',
+      isEnabled: true,
+      lastSyncedAt: new Date(),
+      lastSyncAttemptAt: new Date(),
+      lastSyncError: null,
+      disconnectedAt: null,
     });
 
     const createdReport = await this.reportRepository.createWithUsage({

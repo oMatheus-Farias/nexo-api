@@ -22,6 +22,14 @@ enum ReportItemType {
   PULL_REQUEST
 }
 
+enum RepositorySyncStatus {
+  SYNCED
+  PENDING
+  DISCONNECTED
+  PAUSED
+  ERROR
+}
+
 model User {
   id        String   @id @default(uuid()) @db.Uuid
   googleId  String?  @unique @map("google_id")
@@ -73,13 +81,19 @@ model Integration {
 }
 
 model Repository {
-  id             String   @id @default(uuid()) @db.Uuid
-  integrationId  String   @map("integration_id") @db.Uuid
-  externalRepoId String   @map("external_repo_id")
-  name           String
-  fullName       String   @map("full_name")
-  isPrivate      Boolean  @map("is_private")
-  createdAt      DateTime @default(now()) @map("created_at")
+  id                 String               @id @default(uuid()) @db.Uuid
+  integrationId      String               @map("integration_id") @db.Uuid
+  externalRepoId     String               @map("external_repo_id")
+  name               String
+  fullName           String               @map("full_name")
+  isPrivate          Boolean              @map("is_private")
+  syncStatus         RepositorySyncStatus  @default(PENDING) @map("sync_status")
+  isEnabled          Boolean              @default(true) @map("is_enabled")
+  lastSyncedAt       DateTime?            @map("last_synced_at")
+  lastSyncAttemptAt  DateTime?            @map("last_sync_attempt_at")
+  lastSyncError      String?              @map("last_sync_error") @db.Text
+  disconnectedAt     DateTime?            @map("disconnected_at")
+  createdAt          DateTime             @default(now()) @map("created_at")
 
   reports Report[]
 

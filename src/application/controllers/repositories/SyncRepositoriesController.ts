@@ -9,7 +9,9 @@ export class SyncRepositoriesController extends Controller<'private'> {
   }
 
   async handle({ userId }: Controller.Request<'private'>): Promise<Controller.Response<any>> {
-    const repositories = await this.useCase.execute(userId);
+    const repositories = await this.useCase.execute(userId, {
+      createMissingRepositories: false,
+    });
 
     return {
       statusCode: 200,
