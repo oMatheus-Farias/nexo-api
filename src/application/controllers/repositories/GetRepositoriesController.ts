@@ -1,6 +1,7 @@
 import { Controller } from '@domain/contracts/Controller';
 import { GetRepositoriesQuery } from '@infra/database/prisma/queries/GetRepositoriesQuery';
 import { Injectable } from '@kermel/decorators/Injectable';
+import { z } from 'zod';
 
 @Injectable()
 export class GetRepositoriesController extends Controller<
@@ -19,11 +20,19 @@ export class GetRepositoriesController extends Controller<
   > {
     const { page, limitPerPage, searchTerm } = queryParams as GetRepositoriesController.Request;
 
+    const parsedQueryParams = z
+      .object({
+        page: z.coerce.number().int().min(1).default(1),
+        limitPerPage: z.coerce.number().int().min(1).max(100).optional(),
+        searchTerm: z.string().optional(),
+      })
+      .parse({ page, limitPerPage, searchTerm });
+
     const { repositories, meta } = await this.getRepositoriesQuery.execute({
       userId,
-      page,
-      limitPerPage,
-      searchTerm,
+      page: parsedQueryParams.page,
+      limitPerPage: parsedQueryParams.limitPerPage,
+      searchTerm: parsedQueryParams.searchTerm,
     });
 
     return {
